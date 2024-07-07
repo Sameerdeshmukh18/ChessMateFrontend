@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 export const useSocket =()=>{
 
     const [socket, setsocket] = useState<WebSocket|null>();
-      const WS_URL = "ws://192.168.2.12:8080"
+      const WS_URL = "ws://localhost:8080"
 
     useEffect(() => {
 
