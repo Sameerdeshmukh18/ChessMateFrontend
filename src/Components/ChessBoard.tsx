@@ -68,33 +68,33 @@ export const ChessBoard = ({
                   className={`w-16 h-16 ${
                     (i + j) % 2 === 0 ? "bg-white" : "bg-green-600"
                   }`}
-                  onDrop={(e)=>{
-                    e.preventDefault();
-                    if (from) {
-                      try {
-                        chess.move({
-                          from: from,
-                          to: squareRepresenation,
-                        });
-                        socket.send(
-                          JSON.stringify({
-                            type: "move",
-                            move: {
-                              from: from,
-                              to: squareRepresenation,
-                            },
-                          })
-                        );
-                      } catch (error) {
-                        console.log(error);
-                      }
+                  // onDrop={(e)=>{
+                  //   e.preventDefault();
+                  //   if (from) {
+                  //     try {
+                  //       chess.move({
+                  //         from: from,
+                  //         to: squareRepresenation,
+                  //       });
+                  //       socket.send(
+                  //         JSON.stringify({
+                  //           type: "move",
+                  //           move: {
+                  //             from: from,
+                  //             to: squareRepresenation,
+                  //           },
+                  //         })
+                  //       );
+                  //     } catch (error) {
+                  //       console.log(error);
+                  //     }
 
-                      setBoard(chess.board());
-                      console.log(from, squareRepresenation);
-                      setFrom(null);
+                  //     setBoard(chess.board());
+                  //     console.log(from, squareRepresenation);
+                  //     setFrom(null);
                       
-                    }
-                  }}
+                  //   }
+                  // }}
                 >
                   <div className="w-full h-full flex justify-center">
                     <div className="h-full flex justify-center flex-col">

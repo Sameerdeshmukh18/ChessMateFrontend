@@ -9,8 +9,9 @@ export const Game = () => {
   const [board, setBoard] = useState(chess.board());
   const [pending, setPending] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  const [userColor,setUserColor] = useState();
-  
+  const [userColor, setUserColor] = useState();
+  const [winner, setWinner] = useState(null);
+
   // move constants in separate file
   const INIT_GAME = "init_game";
   const MOVE = "move";
@@ -19,8 +20,8 @@ export const Game = () => {
     if (!socket) {
       return;
     }
-    if(userColor==="Black"){
-      setBoard(board.map(row=>row.reverse()).reverse());
+    if (userColor === "Black") {
+      setBoard(board.map((row) => row.reverse()).reverse());
       console.log(board);
     }
     socket.onmessage = (event) => {
@@ -42,6 +43,7 @@ export const Game = () => {
           break;
         case GAME_OVER:
           console.log("game over");
+          setWinner(message.payload.winner);
           break;
       }
     };
@@ -81,15 +83,27 @@ export const Game = () => {
                     Play
                   </button>
                 ) : (
-                  <div className="px-8  py-4 text-xl text-white font-bold rounded">Waiting for an oppnent...</div>
+                  <div className="px-8  py-4 text-xl text-white font-bold rounded">
+                    Waiting for an oppnent...
+                  </div>
                 )
               ) : (
-                <><div className="px-8  py-4 text-xl text-white font-bold rounded">Game Started</div>
-                <div className="px-4  py-2 text-xl text-white font-bold grid grid-cols-2 gap-4 justify-between">{chess.history()?
-                chess.history().map((move,i)=>{
-                  return <div>{(i+1)+". "+move}</div>
+                <>
+                  <div className="px-8  py-4 text-xl text-white font-bold rounded">
+                    {winner ? (
+                      <div className="px-2 py-2 text-sm text-white font-bold rounded">{`Game Over! ${winner} is victorious!`}</div>
+                    ) : (
+                      "Game Started"
+                    )}
+                  </div>
 
-                }):""}</div>
+                  <div className="px-4  py-2 text-xl text-white font-bold grid grid-cols-2 gap-4 justify-between">
+                    {chess.history()
+                      ? chess.history().map((move, i) => {
+                          return <div>{i + 1 + ". " + move}</div>;
+                        })
+                      : ""}
+                  </div>
                 </>
               )}
             </div>
