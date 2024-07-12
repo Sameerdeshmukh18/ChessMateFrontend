@@ -91,7 +91,7 @@ export const Game = () => {
                 <>
                   <div className="px-8  py-4 text-xl text-white font-bold rounded">
                     {winner ? (
-                      <div className="px-2 py-2 text-sm text-white font-bold rounded">{`Game Over! ${winner} is victorious!`}</div>
+                      <div className="text-sm text-white font-bold rounded">{`Game Over! ${winner} is victorious!`}</div>
                     ) : (
                       "Game Started"
                     )}
