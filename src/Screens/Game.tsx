@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChessBoard } from "../Components/ChessBoard";
 import { useSocket } from "../hooks/useSocket";
 import { Chess } from "chess.js";
@@ -9,9 +9,27 @@ export const Game = () => {
   const [board, setBoard] = useState(chess.board());
   const [pending, setPending] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  const [userColor, setUserColor] = useState();
+  const [userColor, setUserColor] = useState<string | null>(() => null);
   const [winner, setWinner] = useState(null);
 
+  const userColorSet = useRef(false);
+
+  // set board according to users color
+  const setBoardWithUserColor = useCallback(
+    (color: string | null) => {
+      if (color === "Black") {
+        setBoard(
+          chess
+            .board()
+            .map((row) => row.reverse())
+            .reverse()
+        );
+      } else {
+        setBoard(chess.board());
+      }
+    },
+    [userColor]
+  );
   // move constants in separate file
   const INIT_GAME = "init_game";
   const MOVE = "move";
@@ -20,25 +38,25 @@ export const Game = () => {
     if (!socket) {
       return;
     }
-    if (userColor === "Black") {
-      setBoard(board.map((row) => row.reverse()).reverse());
-      console.log(board);
-    }
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       console.log(message);
       switch (message.type) {
         case INIT_GAME:
-          setBoard(chess.board());
+          setBoardWithUserColor(message.color);
           setPending(false);
           setGameStarted(true);
-          setUserColor(message.color);
+          if (!userColorSet.current) {
+            setUserColor(message.color);
+            userColorSet.current = true;
+          }
           console.log("game initialized");
           break;
         case MOVE:
           const move = message.payload;
           chess.move(move);
-          setBoard(chess.board());
+          setBoardWithUserColor(userColor);
+          console.log(userColor);
           console.log("move made");
           break;
         case GAME_OVER:
@@ -47,7 +65,7 @@ export const Game = () => {
           break;
       }
     };
-  }, [socket]);
+  }, [socket, setBoardWithUserColor]);
 
   if (!socket) {
     return <div>Connecting...</div>;
@@ -59,7 +77,7 @@ export const Game = () => {
           <div className="col-span-4  w-full ">
             <ChessBoard
               chess={chess}
-              setBoard={setBoard}
+              setBoardWithUserColor={setBoardWithUserColor}
               board={board}
               socket={socket}
               userColor={userColor}
@@ -89,11 +107,11 @@ export const Game = () => {
                 )
               ) : (
                 <>
-                  <div className="px-8  py-4 text-xl text-white font-bold rounded">
+                  <div className="px-8  py-4 text-sm text-white font-bold rounded">
                     {winner ? (
                       <div className="text-sm text-white font-bold rounded">{`Game Over! ${winner} is victorious!`}</div>
                     ) : (
-                      "Game Started"
+                      `Game Started - you are ${userColor}`
                     )}
                   </div>
 
