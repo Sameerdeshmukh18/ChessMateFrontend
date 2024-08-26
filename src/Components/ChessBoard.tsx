@@ -19,6 +19,26 @@ export const ChessBoard = ({
   socket: WebSocket;
 }) => {
   const [from, setFrom] = useState<Square | null>(null);
+  const [clickedElement, setClickedElement] = useState<HTMLDivElement | null>();
+  // const [isPlaying, setIsPlaying] = useState(false);
+  // const audioRef = useRef(new Audio('../../public/move-self.mp3'));
+
+  // const playMoveSound = useCallback(() => {
+  //   console.log("in playmove sound")
+  //   if (isPlaying) {
+  //     return;
+  //   }
+
+  //   setIsPlaying(true);
+  //   audioRef.current.currentTime = 0; // Rewind to the start
+  //   audioRef.current.play().catch(error => {
+  //     console.error("Error playing audio:", error);
+  //   });
+
+  //   audioRef.current.onended = () => {
+  //     setIsPlaying(false);
+  //   };
+  // }, []);
 
   return (
     <div>
@@ -36,7 +56,17 @@ export const ChessBoard = ({
                       (8 - i)) as Square);
               return (
                 <div
-                  onClick={() => {
+                  onClick={(e) => {
+                    if (!clickedElement) {
+                      const element = e.currentTarget;
+                      setClickedElement(element);
+                      element.classList.add("bg-yellow-200");
+                      element.classList.add("bg-opacity-25");
+                    } else {
+                      clickedElement?.classList.remove("bg-yellow-200");
+                      clickedElement?.classList.remove("bg-opacity-25");
+                      setClickedElement(null);
+                    }
                     if (!from) {
                       if (chess.turn() === "w" && userColor === "White") {
                         setFrom(square?.square ?? null);
@@ -63,7 +93,7 @@ export const ChessBoard = ({
                       } catch (error) {
                         console.log(error);
                       }
-
+                      // playMoveSound();
                       setBoardWithUserColor(userColor);
                       console.log(from, squareRepresenation);
                       setFrom(null);
@@ -102,23 +132,28 @@ export const ChessBoard = ({
                   // }}
                 >
                   <div className="w-full h-full flex justify-center">
-                    <div className="h-full flex justify-center flex-col">
-                      <img
-                        src={`./${
-                          square?.color === "b"
-                            ? square.type
-                            : square?.type + "_w"
-                        }.svg`}
-                        alt=""
-                        className=""
-                        draggable="true"
-                        onDrag={(e) => {
-                          e.preventDefault();
-                          console.log("dragging-");
-                          setFrom(square?.square ?? null);
-                        }}
-                      />
-                      {}
+                    <div className="w-full h-full flex justify-center">
+                      {square?.type ? (
+                        <div className="h-full flex justify-center flex-col">
+                          <img
+                            src={`./${
+                              square?.color === "b"
+                                ? square.type
+                                : square?.type + "_w"
+                            }.svg`}
+                            alt=""
+                            className=""
+                            draggable="true"
+                            onDrag={(e) => {
+                              e.preventDefault();
+                              console.log("dragging-");
+                              setFrom(square?.square ?? null);
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </div>

@@ -34,6 +34,7 @@ export const Game = () => {
   const INIT_GAME = "init_game";
   const MOVE = "move";
   const GAME_OVER = "game_Over";
+
   useEffect(() => {
     if (!socket) {
       return;
@@ -74,7 +75,7 @@ export const Game = () => {
     <div className="flex justify-center h-full">
       <div className="pt-8 max-w-screen-lg h-full w-full">
         <div className="grid grid-cols-6 gap-4 w-full ">
-          <div className="col-span-4  w-full ">
+          <div className="col-span-4 w-full ">
             <ChessBoard
               chess={chess}
               setBoardWithUserColor={setBoardWithUserColor}
@@ -83,12 +84,12 @@ export const Game = () => {
               userColor={userColor}
             />
           </div>
-          <div className="col-span-2 bg-stone-800 w-full flex h-full justify-center overflow-scroll">
-            <div className="pt-8">
+          <div className="col-span-2 bg-stone-800 w-full flex flex-col h-full justify-between max-h-lg">
+            <div className="pt-8 mx-auto">
               {!gameStarted ? (
                 !pending ? (
                   <button
-                    className="px-8  py-4 text-xl bg-green-500 hover:bg-blue-700 text-white font-bold rounded"
+                    className="px-8  py-4 text-xl flex justify-center bg-green-500 hover:bg-blue-700 text-white font-bold rounded"
                     onClick={() => {
                       socket.send(
                         JSON.stringify({
@@ -101,21 +102,20 @@ export const Game = () => {
                     Play
                   </button>
                 ) : (
-                  <div className="px-8  py-4 text-xl text-white font-bold rounded">
+                  <div className="px-8  py-4 text-xl flex justify-center text-white font-bold rounded">
                     Waiting for an oppnent...
                   </div>
                 )
               ) : (
                 <>
-                  <div className="px-8  py-4 text-sm text-white font-bold rounded">
+                  <div className="px-8  py-4 text-sm flex justify-center text-white font-bold rounded">
                     {winner ? (
                       <div className="text-sm text-white font-bold rounded">{`Game Over! ${winner} is victorious!`}</div>
                     ) : (
                       `Game Started - you are ${userColor}`
                     )}
                   </div>
-
-                  <div className="px-4  py-2 text-xl text-white font-bold grid grid-cols-2 gap-4 justify-between">
+                  <div className="px-4  py-2 text-sm text-white font-bold grid grid-cols-2 gap-4 place-items-center max-h-72 overflow-auto ">
                     {chess.history()
                       ? chess.history().map((move, i) => {
                           return <div>{i + 1 + ". " + move}</div>;
@@ -124,6 +124,18 @@ export const Game = () => {
                   </div>
                 </>
               )}
+            </div>
+            <div className="flex justify-center bg-stone-700">
+              <div className="flex w-full flex-col justify-center">
+                <div className="flex justify-around">
+                  <button className="px-6  m-1 py-1 text-sm bg-stone-600 hover:bg-stone-500 text-white rounded">
+                    Resign
+                  </button>
+                  <button className="px-6 m-1 py-1 text-sm bg-stone-600 hover:bg-stone-500 text-white rounded">
+                    1/2 Draw
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
