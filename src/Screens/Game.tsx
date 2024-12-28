@@ -72,10 +72,10 @@ export const Game = () => {
     return <div>Connecting...</div>;
   }
   return (
-    <div className="flex justify-center h-full">
-      <div className="pt-8 max-w-screen-lg h-full w-full">
-        <div className="grid grid-cols-6 gap-4 w-full ">
-          <div className="col-span-4 w-full ">
+    <div className="md:flex md:justify-center md:h-full">
+      <div className="pt-8 md:max-w-screen-lg md:h-full md:w-full">
+        <div className="md:grid md:grid-cols-6 md:gap-4 md:w-full">
+          <div className="md:col-span-4 md:w-full w-full h-1/2">
             <ChessBoard
               chess={chess}
               setBoardWithUserColor={setBoardWithUserColor}
@@ -84,8 +84,8 @@ export const Game = () => {
               userColor={userColor}
             />
           </div>
-          <div className="col-span-2 bg-stone-800 w-full flex flex-col h-full justify-between max-h-lg">
-            <div className="pt-8 mx-auto">
+          <div className="md:col-span-2 bg-stone-800 w-full flex flex-col h-full justify-between max-h-lg">
+            <div className="py-8 mx-auto">
               {!gameStarted ? (
                 !pending ? (
                   <button

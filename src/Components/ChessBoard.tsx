@@ -41,7 +41,7 @@ export const ChessBoard = ({
   // }, []);
 
   return (
-    <div>
+    <div className="max-h-full max-w-full">
       {board.map((row, i) => {
         return (
           <div key={i} className="text-white-200 flex justify-center">
@@ -100,7 +100,7 @@ export const ChessBoard = ({
                     }
                   }}
                   key={j}
-                  className={`w-16 h-16 ${
+                  className={`md:w-16 md:h-16 w-12 h-12 ${
                     (i + j) % 2 === 0 ? "bg-white" : "bg-green-600"
                   }`}
                   // onDrop={(e)=>{
