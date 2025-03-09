@@ -44,7 +44,7 @@ export const ChessBoard = ({
     <div className="max-h-full max-w-full">
       {board.map((row, i) => {
         return (
-          <div key={i} className="text-white-200 flex justify-center">
+          <div key={i} className="text-textWhite flex justify-center">
             {row.map((square, j) => {
               const squareRepresenation =
                 userColor === "Black"
@@ -99,42 +99,42 @@ export const ChessBoard = ({
                       setFrom(null);
                     }
                   }}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (from) {
+                      try {
+                        chess.move({
+                          from: from,
+                          to: squareRepresenation,
+                          promotion: "q",
+                        });
+                        socket.send(
+                          JSON.stringify({
+                            type: "move",
+                            move: {
+                              from: from,
+                              to: squareRepresenation,
+                            },
+                          })
+                        );
+                      } catch (error) {
+                        console.log(error);
+                      }
+                      setBoardWithUserColor(userColor);
+                      console.log(from, squareRepresenation);
+                      setFrom(null);
+                    }
+                  }}
                   key={j}
                   className={`md:w-16 md:h-16 w-12 h-12 ${
-                    (i + j) % 2 === 0 ? "bg-white" : "bg-green-600"
+                    (i + j) % 2 === 0 ? "bg-lightSquare" : "bg-darkSquare"
                   }`}
-                  // onDrop={(e)=>{
-                  //   e.preventDefault();
-                  //   if (from) {
-                  //     try {
-                  //       chess.move({
-                  //         from: from,
-                  //         to: squareRepresenation,
-                  //       });
-                  //       socket.send(
-                  //         JSON.stringify({
-                  //           type: "move",
-                  //           move: {
-                  //             from: from,
-                  //             to: squareRepresenation,
-                  //           },
-                  //         })
-                  //       );
-                  //     } catch (error) {
-                  //       console.log(error);
-                  //     }
-
-                  //     setBoard(chess.board());
-                  //     console.log(from, squareRepresenation);
-                  //     setFrom(null);
-
-                  //   }
-                  // }}
                 >
                   <div className="w-full h-full flex justify-center">
                     <div className="w-full h-full flex justify-center">
                       {square?.type ? (
-                        <div className="h-full flex justify-center flex-col">
+                        <div className="h-full w-full flex justify-center flex-col">
                           <img
                             src={`./${
                               square?.color === "b"
