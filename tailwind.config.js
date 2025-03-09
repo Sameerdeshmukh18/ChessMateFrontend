@@ -6,6 +6,14 @@ export default {
   ],
   theme: {
     extend: {},
+    colors: {
+      purple: "#0a0e28",
+      darkPurple: "#05071a",
+      buttonPurple: "#615fff",
+      textWhite: "#ffffff",
+      darkSquare: "#615fff",
+      lightSquare: "#ffffff"
+    }
     
   },
   plugins: [],
