@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 export const useSocket =()=>{
 
     const [socket, setsocket] = useState<WebSocket|null>();
-      const WS_URL = "wss://chessmatebackend-production.up.railway.app/"
+      const WS_URL = "wss://chessmatebackend-9r1r.onrender.com"
 
     useEffect(() => {
 
